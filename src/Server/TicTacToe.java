@@ -32,11 +32,8 @@ public class TicTacToe {
                 "Да? Введите: «д»\n"+
                 "Нет? Введите любой другой символ.");
                 
-                if(Server.readLine().equals("д")) {
-                    playerOne = null;
-                    playerTwo = null;
+                if(Server.readLine().equals("д"))
                     login();
-                }
             }
             new TicTacToe(playerOne, playerTwo);
         
@@ -46,10 +43,12 @@ public class TicTacToe {
     }
     
     public static void login() {
-          
+        playerOne = null;
+        playerTwo = null;
+        
         try {
             
-            final String nameOne, nameTwo;
+            String nameOne, nameTwo;
         
             Server.println("Введите имя первого игрока.");
             nameOne = Server.readLine();
@@ -58,10 +57,10 @@ public class TicTacToe {
         
             for(Player person: RatingGame.list) {
                 if(person.getName().equals(nameOne)) 
-                    playerOne = person;//new Player(nameOne, person.victories, person.defeats, person.draws);
+                    playerOne = person;
                 
                 if(person.getName().equals(nameTwo))
-                    playerTwo = person;//new Player(nameTwo, person.victories, person.defeats, person.draws);
+                    playerTwo = person;
             }
         
             if(playerOne == null) {
@@ -83,7 +82,7 @@ public class TicTacToe {
     public static void game() throws Exception {
         
         showMap();
-        countStep = 0;
+        
         while(!end) {
             for(int i = 1; i <= 2 && !end; i++) {
                 
@@ -96,7 +95,7 @@ public class TicTacToe {
                     move(playerTwo);
                 }
                 
-                if(++countStep == 9 && !end) {
+                if(game.steps[8] != null && !end) {
                     Server.println("Ничья!");
                     
                     playerOne.addDraws();
@@ -125,8 +124,11 @@ public class TicTacToe {
         
         Server.println("Игрок " + player.getName() + ", играя за '" + player.getSymbol() + "', победил!");
         player.addVictories();
-        player.addDefeats();
         
+        if(player == playerOne)
+            playerTwo.addDefeats();
+        else
+            playerOne.addDefeats();
         
         Main.parser.gameResult(player);
 
