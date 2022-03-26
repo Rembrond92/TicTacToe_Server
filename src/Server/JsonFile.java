@@ -175,24 +175,63 @@ public class JsonFile implements ParserGame {
         
         for(String name: listNames)
             Server.println(name);
-        
-        Server.println("Введите имя реплея. Выйти в меню? Введите «в»");
-        
+                
         while(true) {
+            Server.println("Запустить реплей? Введите «з»\n" +
+                           "Удалить реплей? Введите «у»\n" +
+                           "Очистить все реплеи? Введите «о»\n" +
+                           "Вывести ещё раз список всех реплеев? Введите «с»\n" +
+                           "Выйти в меню? Введите «в»");
             try {
                 String name = Server.readLine();
             
-                if(listNames.contains(name)) {
+                switch (name) {
+                    
+                    case "з":
+                        Server.println("Введите имя реплея.");
+                        name = Server.readLine();
+                        if(listNames.contains(name)) {
+                            this.read(name);
+                            break;
+                        }
+                        else {
+                            Server.println("Неверное имя реплея, попробуйте ещё раз.");
+                        } break;
                 
-                    this.read(name);
-                    break;
-                }
+                    case "у":
+                        Server.println("Введите имя реплея.");
+                        name = Server.readLine();
+                        if(listNames.contains(name)) {
+                            File del = new File(file.getPath() + "/" + name + ".json");
+                            del.delete();
+                            break;
+                        }
+                        else {
+                            Server.println("Неверное имя реплея, попробуйте ещё раз.");
+                        } break;
+                    
+                    case "о":
+                        for(String names: listNames) {
+                            File del = new File(file.getPath() + "/" + names + ".json");
+                            del.delete();
+                        } break;
+                    
+                    case "с":
+                        this.readNames();
+                        Server.println("Список доступных реплеев:");
+        
+                        Collections.sort(listNames);
+        
+                        for(String names: listNames)
+                            Server.println(names);
+                        break;
+                        
+                    case "в": return;
                 
-                else if(name.equals("в")) return;
-                
-                else {
-                    Server.println("Неверное имя реплея, попробуйте ещё раз. Выйти в меню? Введите «в»");
-                }
+                    default:
+                        Server.println("Неверный выбор! Попробуйте ещё раз.");
+                        break;
+                } 
             
             } catch(Exception e) {
                 e.printStackTrace();

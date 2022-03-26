@@ -52,9 +52,13 @@ public class TicTacToe {
         
             Server.println("Введите имя первого игрока.");
             nameOne = Server.readLine();
-            Server.println("Введите имя второго игрока.");
-            nameTwo = Server.readLine();
-        
+            while(true) {
+                Server.println("Введите имя второго игрока.");
+                nameTwo = Server.readLine();
+                if(nameOne.equals(nameTwo))
+                    Server.println("Имя уже занято первым игроком! Введите другое имя.");
+                else break;
+            }
             for(Player person: RatingGame.list) {
                 if(person.getName().equals(nameOne)) 
                     playerOne = person;
